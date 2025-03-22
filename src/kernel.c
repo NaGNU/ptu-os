@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include <stdbool.h>
-#include <string.h> 
+#include <stddef.h>
 
-#define VIDEO_MEMORY 0xB8000
+#define VIDEO_MEMORY 0xB8000  
 #define COLOR 0x07
 #define KEYBOARD_PORT 0x60
 #define MAX_INPUT_LENGTH 1488
@@ -13,6 +13,7 @@ static bool cursor_visible = true;
 static char input_buffer[MAX_INPUT_LENGTH];
 static int input_length = 0;
 
+// Объявления функций
 uint8_t inb(uint16_t port);
 void outb(uint16_t port, uint8_t value);
 void update_cursor();
@@ -102,7 +103,7 @@ void execute_command(const char *command) {
     } else if (strcmp(command, "fetch") == 0) {
         print("OS: PtuOS\n");
         print("Version: 0.1\n");
-        print("Architecture: x86\n");
+        print("Architecture: x86_64\n");
     } else {
         print("Unknown command: ");
         print(command);
@@ -221,7 +222,7 @@ void kernel_main(void) {
     clear_screen();
     init_pic();
 
-    print("Welcome to PtuOS!\n");
+    print("Welcome to PtuOS (64-bit)!\n");
     print("Type 'help' for a list of commands.\n");
     print("$ ");
 
