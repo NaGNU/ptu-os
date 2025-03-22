@@ -11,15 +11,12 @@ section .text
 global _start
 
 _start:
-    ; Загрузчик передаёт управление сюда
     cli                         
     mov esp, stack_top          
 
-    ; Вызов функции на C
     extern kernel_main
     call kernel_main
 
-    ; Бесконечный цикл (на случай, если kernel_main вернётся)
     hlt
     jmp $
 
