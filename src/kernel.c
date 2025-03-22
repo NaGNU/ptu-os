@@ -2,7 +2,25 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define VIDEO_MEMORY 0xB8000  
+int strcmp(const char *s1, const char *s2) {
+    while (*s1 && (*s1 == *s2)) {
+        s1++;
+        s2++;
+    }
+    return *(unsigned char *)s1 - *(unsigned char *)s2;
+}
+
+int strncmp(const char *s1, const char *s2, size_t n) {
+    while (n && *s1 && (*s1 == *s2)) {
+        s1++;
+        s2++;
+        n--;
+    }
+    if (n == 0) return 0;
+    return *(unsigned char *)s1 - *(unsigned char *)s2;
+}
+
+#define VIDEO_MEMORY 0xB8000
 #define COLOR 0x07
 #define KEYBOARD_PORT 0x60
 #define MAX_INPUT_LENGTH 1488
@@ -13,7 +31,6 @@ static bool cursor_visible = true;
 static char input_buffer[MAX_INPUT_LENGTH];
 static int input_length = 0;
 
-// Объявления функций
 uint8_t inb(uint16_t port);
 void outb(uint16_t port, uint8_t value);
 void update_cursor();
@@ -165,13 +182,13 @@ void keyboard_handler() {
         }
     } else if (c == '\n') {
         putchar('\n');
-        input_buffer[input_length] = '\0';  
-        execute_command(input_buffer);      
-        input_length = 0;                 
-        print("$ ");                       
+        input_buffer[input_length] = '\0';
+        execute_command(input_buffer);
+        input_length = 0;
+        print("$ ");
     } else if (c != 0 && input_length < MAX_INPUT_LENGTH - 1) {
         putchar(c);
-        input_buffer[input_length++] = c; 
+        input_buffer[input_length++] = c;
     }
 
     update_cursor();
@@ -198,24 +215,6 @@ void init_pic() {
     outb(0xA1, 0x01);
     outb(0x21, 0xFD);
     outb(0xA1, 0xFF);
-}
-
-int strcmp(const char *s1, const char *s2) {
-    while (*s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-    }
-    return *(unsigned char *)s1 - *(unsigned char *)s2;
-}
-
-int strncmp(const char *s1, const char *s2, size_t n) {
-    while (n && *s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-        n--;
-    }
-    if (n == 0) return 0;
-    return *(unsigned char *)s1 - *(unsigned char *)s2;
 }
 
 void kernel_main(void) {
