@@ -25,3 +25,7 @@ kernel_asm.o: kernel.asm
 clean:
 	@echo "Clean..."
 	@rm -f *.o *.bin
+
+qemu: all
+	@echo "Starting qemu"
+	@qemu-system-x86_64 -kernel kernel.bin

@@ -174,6 +174,7 @@ void keyboard_handler() {
     }
 
     update_cursor();
+    outb(0x20, 0x20);
 }
 
 uint8_t inb(uint16_t port) {
