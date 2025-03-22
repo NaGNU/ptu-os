@@ -5,7 +5,7 @@
 #define VIDEO_MEMORY 0xB8000
 #define COLOR 0x07
 #define KEYBOARD_PORT 0x60
-#define MAX_INPUT_LENGTH 100
+#define MAX_INPUT_LENGTH 1488
 
 static int cursor_x = 0;
 static int cursor_y = 0;
