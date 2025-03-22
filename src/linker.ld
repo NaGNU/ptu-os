@@ -1,15 +1,11 @@
 ENTRY(_start)
 
 SECTIONS {
-    . = 1M;  
+    . = 1M;
 
     .text : {
         *(.multiboot)
         *(.text)
-    }
-
-    .bss : {
-        *(.bss)
     }
 
     .rodata : {
@@ -18,5 +14,9 @@ SECTIONS {
 
     .data : {
         *(.data)
+    }
+
+    .bss : {
+        *(.bss)
     }
 }
