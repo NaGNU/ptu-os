@@ -14,7 +14,6 @@ global _start
 _start:
     cli                       
     mov rsp, stack_top        
-
     ; Вызов функции на C
     extern kernel_main
     call kernel_main
