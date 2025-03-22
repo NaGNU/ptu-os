@@ -11,13 +11,13 @@ OBJS = kernel.o kernel_asm.o
 all: kernel.bin
 
 kernel.bin: $(OBJS)
-        @$(LD) $(LDFLAGS) -o $@ $^
+	@$(LD) $(LDFLAGS) -o $@ $^
 
 kernel.o: kernel.c
-        @$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 kernel_asm.o: kernel.asm
-        @$(ASM) $(ASMFLAGS) $< -o $@
+	@$(ASM) $(ASMFLAGS) $< -o $@
 
 clean:
-        @rm -f *.o *.bin
+	@rm -f *.o *.bin
