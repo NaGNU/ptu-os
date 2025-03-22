@@ -1,4 +1,4 @@
-C=tcc
+C=gcc
 ASM=nasm
 LD=ld
 
