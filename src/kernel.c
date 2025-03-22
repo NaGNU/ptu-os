@@ -100,7 +100,7 @@ void execute_command(const char *command) {
         print(command + 5);
         print("\n");
     } else if (strcmp(command, "fetch") == 0) {
-        print("OS: GeoOS\n");
+        print("OS: PtuOS\n");
         print("Version: 0.1\n");
         print("Architecture: x86\n");
     } else {
