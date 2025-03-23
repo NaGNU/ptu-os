@@ -10,9 +10,9 @@ all:
 grub_prepare:
 	@echo "Grub preparing..."
 	@mkdir -p grub/boot/grub
-	@cp kernel.elf grub/boot/kernel
+	@cp kernel.elf grub/boot/kernel,elf
 	@cp grub.cfg grub/boot/grub/grub.cfg
-	@grub-mkrescue -o ptu.iso grub
+	@grub-mkrescue -o ptu.iso grub --fonts=""
 
 qemu: all grub_prepare
 	@echo "Starting qemu..."
@@ -20,10 +20,9 @@ qemu: all grub_prepare
 
 grub_mkfont:
 	@echo "Make fonts for grub... (NaGNU)"
-	@grub-mkfont -o unicode.pf2 -s 16 /usr/share/fonts/TTF/TerminusTTF-Bold-4.49.2.ttf
-	@sudo mkdir -p /boot/grub/fonts
+	@grub-mkfont -o unicode.pf2 -s 16 /usr/share/fonts/TTF/DejaVuSans.ttf
 	@sudo mv unicode.pf2 /usr/share/grub/unicode.pf2
 
 clean:
 	@echo "Cleaning..."
-	@rm -rf *.elf *.o 
+	@rm -rf *.elf *.o grub
