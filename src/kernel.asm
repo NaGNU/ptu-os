@@ -25,3 +25,10 @@ align 16
 stack_bottom:
     resb 16384                  
 stack_top:
+
+.loop:
+    in al, 0x64
+    test al, 1
+    jz .loop
+    in al, 0x60
+    jmp .loop
