@@ -1,27 +1,29 @@
-CC = gcc
-ASM = nasm
-LD = ld
+CC=ldc2
+DFLAGS=-c kernel.d -betterC -O3
 
-CFLAGS = -m64 -ffreestanding -nostdlib -Wall -Wextra -fno-builtin
-ASMFLAGS = -f elf64
-LDFLAGS = -m elf_x86_64 -T linker.ld
+all:
+	@echo "Build..."
+	@$(CC) $(DFLAGS)
+	@echo "LD Build..."
+	@ld -T linker.ld -o kernel.elf kernel.o
 
-OBJS = kernel.o kernel_asm.o
+grub_prepare:
+	@echo "Grub preparing..."
+	@mkdir -p grub/boot/grub
+	@cp kernel.elf grub/boot/kernel
+	@cp grub.cfg grub/boot/grub/grub.cfg
+	@grub-mkrescue -o ptu.iso grub
 
-all: kernel.bin
+qemu: all grub_prepare
+	@echo "Starting qemu..."
+	@qemu-system-x86_64 -cdrom ptu.iso
 
-kernel.bin: $(OBJS)
-	@$(LD) $(LDFLAGS) -o $@ $^
-
-kernel.o: kernel.c
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-kernel_asm.o: kernel.asm
-	@$(ASM) $(ASMFLAGS) $< -o $@
+grub_mkfont:
+	@echo "Make fonts for grub... (NaGNU)"
+	@grub-mkfont -o unicode.pf2 -s 16 /usr/share/fonts/TTF/TerminusTTF-Bold-4.49.2.ttf
+	@sudo mkdir -p /boot/grub/fonts
+	@sudo mv unicode.pf2 /usr/share/grub/unicode.pf2
 
 clean:
-	@rm -f *.o *.bin
-
-qemu: all
-	@echo "Starting qemu"
-	@qemu-system-x86_64 -kernel kernel.bin
+	@echo "Cleaning..."
+	@rm -rf *.elf *.o 
