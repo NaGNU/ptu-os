@@ -1,6 +1,24 @@
 #include <stdint.h>
 #include <stdbool.h>
-#include <string.h> 
+#include <stddef.h>
+
+int strcmp(const char *s1, const char *s2) {
+    while (*s1 && (*s1 == *s2)) {
+        s1++;
+        s2++;
+    }
+    return *(unsigned char *)s1 - *(unsigned char *)s2;
+}
+
+int strncmp(const char *s1, const char *s2, size_t n) {
+    while (n && *s1 && (*s1 == *s2)) {
+        s1++;
+        s2++;
+        n--;
+    }
+    if (n == 0) return 0;
+    return *(unsigned char *)s1 - *(unsigned char *)s2;
+}
 
 #define VIDEO_MEMORY 0xB8000
 #define COLOR 0x07
@@ -102,7 +120,7 @@ void execute_command(const char *command) {
     } else if (strcmp(command, "fetch") == 0) {
         print("OS: PtuOS\n");
         print("Version: 0.1\n");
-        print("Architecture: x86\n");
+        print("Architecture: x86_64\n");
     } else {
         print("Unknown command: ");
         print(command);
@@ -164,13 +182,13 @@ void keyboard_handler() {
         }
     } else if (c == '\n') {
         putchar('\n');
-        input_buffer[input_length] = '\0';  
-        execute_command(input_buffer);      
-        input_length = 0;                 
-        print("$ ");                       
+        input_buffer[input_length] = '\0';
+        execute_command(input_buffer);
+        input_length = 0;
+        print("$ ");
     } else if (c != 0 && input_length < MAX_INPUT_LENGTH - 1) {
         putchar(c);
-        input_buffer[input_length++] = c; 
+        input_buffer[input_length++] = c;
     }
 
     update_cursor();
@@ -200,29 +218,11 @@ void init_pic() {
     outb(0xA1, 0xFF);
 }
 
-int strcmp(const char *s1, const char *s2) {
-    while (*s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-    }
-    return *(unsigned char *)s1 - *(unsigned char *)s2;
-}
-
-int strncmp(const char *s1, const char *s2, size_t n) {
-    while (n && *s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-        n--;
-    }
-    if (n == 0) return 0;
-    return *(unsigned char *)s1 - *(unsigned char *)s2;
-}
-
 void kernel_main(void) {
     clear_screen();
     init_pic();
 
-    print("Welcome to PtuOS!\n");
+    print("Welcome to PtuOS (64-bit)!\n");
     print("Type 'help' for a list of commands.\n");
     print("$ ");
 
